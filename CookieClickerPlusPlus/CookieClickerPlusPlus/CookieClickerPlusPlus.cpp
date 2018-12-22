@@ -3,11 +3,45 @@
 #include "pch.h"
 #include <iostream>
 #include <Windows.h>
+#include <fstream>
+#include <string>
 using namespace std; 
 
+bool fexists(const string& name) {
+	ifstream f(name.c_str());
+	return f.good();
+}
+
 int main() {
-	float cookies = 0, cursor_rate = 0.1;
+	double cookies = 0, cursor_rate = 0.1;
 	int counter = 0, manual_rate = 1, cursor = 0, cursor_price = 15, rate_price = 100;
+	string out;
+	if (fexists("savedata.json") == 1) {
+		ifstream savefile("savedata.json");
+		string line;
+		for (int x = 0; getline(savefile, line) && 6 > x; ++x) {
+			if (x == 0) {
+				cookies = stof(line);
+			}
+			if (x == 1) {
+				cursor_rate = stof(line);
+			}
+			if (x == 2) {
+				manual_rate = atoi(line.c_str());
+				cout << manual_rate;
+			}
+			if (x == 3) {
+				cursor = atoi(line.c_str());
+			}
+			if (x == 4) {
+				cursor_price = atoi(line.c_str());
+			}
+			if (x == 5) {
+				rate_price = atoi(line.c_str());
+			}
+		}
+		cout << cookies << endl << cursor_rate << endl << manual_rate << endl << cursor << endl << cursor_price << endl << rate_price;
+	}
 	while (1) {
 		system("CLS");
 		cout << "\n                                                   C++Kie Clicker\n\n";
@@ -63,5 +97,9 @@ int main() {
 			counter = -1;
 		}
 		counter++;
+		ofstream savefile("savedata.json");
+		savefile << cookies << endl << cursor_rate << endl << manual_rate << endl << cursor << endl << cursor_price << endl << rate_price;
+		savefile.close();
    }
+	return 0;
 }
