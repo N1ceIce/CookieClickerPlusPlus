@@ -33,6 +33,8 @@ Once the executable is built, it will be found in either `/Release` or `/x64/Rel
 
 - [ ] More Advanced Upgrades
 
+- [x] Saving
+
 - [ ] GUI
 
 - [ ] Ready To Release
