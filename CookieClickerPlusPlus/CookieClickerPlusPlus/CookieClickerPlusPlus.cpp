@@ -6,19 +6,40 @@
 #include <Windows.h>
 #include <fstream>
 #include <string>
+#include <ctime>
 using namespace std; 
 
-bool fexists(const string& name) {
-	ifstream f(name.c_str());
-	return f.good();
+void cookie_time(double cookies, double cursor_rate, int manual_rate, int cursor, int cursor_price, int rate_price) {
+	system("CLS");
+	cout << "\n                                                   C++Kie Clicker\n\n";
+	cout << "                                           ______________________________ \n";
+	cout << "                                          |                              |\n";
+	cout << "                                          |                  *           |\n";
+	cout << "                                          |       *                   *  |\n";
+	cout << "                                          |                   *          |\n";
+	cout << "                                          |   *                          |\n";
+	cout << "                                          |          *                   |\n";
+	cout << "                                          |                     *        |\n";
+	cout << "                                          |                              |\n";
+	cout << "                                          |   *           *              |\n";
+	cout << "                                          |                        *     |\n";
+	cout << "                                          |                              |\n";
+	cout << "                                           ------------------------------ \n";
+	cout << "                                                 " "You have " << cookies << " cookies!\n";
+	cout << "                                                 " "You have " << cursor << " cursors!\n";
+	cout << "                                                      " << manual_rate << " per click\n";
+	cout << "                                                    " << cursor * cursor_rate << " per second\n\n";
+	cout << "       Press A to upgrade Cursor                                                      Press S to upgrade Rate\n";
+	cout << "              Price: " << cursor_price << "                                                                      Price: " << rate_price;
 }
 
 int main() {
 	double cookies = 0, cursor_rate = 0.1;
-	int counter = 0, manual_rate = 1, cursor = 0, cursor_price = 15, rate_price = 100;
+	int manual_rate = 1, cursor = 0, cursor_price = 15, rate_price = 100;
+	time_t ntime, counter = 0;
 	string out;
-	if (fexists("savedata.json") == 1) {
-		ifstream savefile("savedata.json");
+	ifstream savefile("savedata.json");
+	if (savefile) {
 		string line;
 		for (int x = 0; getline(savefile, line) && 6 > x; ++x) {
 			if (x == 0) {
@@ -29,7 +50,6 @@ int main() {
 			}
 			if (x == 2) {
 				manual_rate = atoi(line.c_str());
-				cout << manual_rate;
 			}
 			if (x == 3) {
 				cursor = atoi(line.c_str());
@@ -41,36 +61,16 @@ int main() {
 				rate_price = atoi(line.c_str());
 			}
 		}
-		cout << cookies << endl << cursor_rate << endl << manual_rate << endl << cursor << endl << cursor_price << endl << rate_price;
+		//cout << cookies << endl << cursor_rate << endl << manual_rate << endl << cursor << endl << cursor_price << endl << rate_price;
+		cookie_time(cookies, cursor_rate, manual_rate, cursor, cursor_price, rate_price);
 	}
 	while (1) {
-		system("CLS");
-		cout << "\n                                                   C++Kie Clicker\n\n";
-		cout << "                                           ______________________________ \n"; 
-		cout << "                                          |                              |\n";
-		cout << "                                          |                  *           |\n";
-		cout << "                                          |       *                   *  |\n";
-		cout << "                                          |                   *          |\n";
-		cout << "                                          |   *                          |\n";
-		cout << "                                          |          *                   |\n";
-		cout << "                                          |                     *        |\n";
-		cout << "                                          |                              |\n";
-		cout << "                                          |   *           *              |\n";
-		cout << "                                          |                        *     |\n";
-		cout << "                                          |                              |\n";
-		cout << "                                           ------------------------------ \n";
-		cout << "                                                 " "You have "<< cookies << " cookies!\n";
-		cout << "                                                 " "You have " << cursor << " cursors!\n";
-		cout << "                                                      " << manual_rate << " per click\n";
-		cout << "                                                    " << cursor * cursor_rate << " per second\n\n";
-		cout << "       Press A to upgrade Cursor                                                      Press S to upgrade Rate\n";
-		cout << "              Price: " << cursor_price << "                                                                      Price: " << rate_price;
-	
 		if (GetKeyState(VK_SPACE) & (0x8000)) {
 			cookies += manual_rate;
 			while (GetKeyState(VK_SPACE) & (0x8000)) {
 				Sleep(1);
 			}
+			cookie_time(cookies, cursor_rate, manual_rate, cursor, cursor_price, rate_price);
 		}
 		if (GetKeyState('A') & (0x8000)) {
 			if (cookies >= cursor_price) {
@@ -81,6 +81,7 @@ int main() {
 			while (GetKeyState('A') & (0x8000)) {
 				Sleep(1);
 			}
+			cookie_time(cookies, cursor_rate, manual_rate, cursor, cursor_price, rate_price);
 		}
 		if(GetKeyState('S') & (0x8000)) {
 			if (cookies >= rate_price) {
@@ -92,12 +93,19 @@ int main() {
 			while (GetKeyState('S') & (0x8000)) {
 				Sleep(1);
 			}
+			cookie_time(cookies, cursor_rate, manual_rate, cursor, cursor_price, rate_price);
 		}
-		if (counter == 15) {
+		ntime = time(NULL);
+		if (counter == 0) {
+			counter = ntime + 1;
+		}
+		if (ntime >= counter) {
 			cookies += cursor_rate * cursor;
-			counter = -1;
+			if (cursor >= 1) {
+				cookie_time(cookies, cursor_rate, manual_rate, cursor, cursor_price, rate_price);
+			}
+			counter = ntime + 1;
 		}
-		counter++;
 		ofstream savefile("savedata.json");
 		savefile << cookies << endl << cursor_rate << endl << manual_rate << endl << cursor << endl << cursor_price << endl << rate_price;
 		savefile.close();
