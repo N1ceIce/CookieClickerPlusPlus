@@ -62,8 +62,8 @@ int main() {
 			}
 		}
 		//cout << cookies << endl << cursor_rate << endl << manual_rate << endl << cursor << endl << cursor_price << endl << rate_price;
-		cookie_time(cookies, cursor_rate, manual_rate, cursor, cursor_price, rate_price);
 	}
+	cookie_time(cookies, cursor_rate, manual_rate, cursor, cursor_price, rate_price);
 	while (1) {
 		if (GetKeyState(VK_SPACE) & (0x8000)) {
 			cookies += manual_rate;
