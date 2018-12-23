@@ -1,2 +1,2 @@
 # C++kieClickerPlusPlus
-A small C++ implementation of Cookie Clicker
+A small Visual C++ implementation of Cookie Clicker
